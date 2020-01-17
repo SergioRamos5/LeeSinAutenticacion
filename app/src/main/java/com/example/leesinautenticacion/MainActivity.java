@@ -1,6 +1,7 @@
 package com.example.leesinautenticacion;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -62,5 +63,31 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        firebaseDatabase.getReference("items").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                tvSalida.setText(dataSnapshot.getValue().toString());
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Toast.makeText(getApplicationContext(),dataSnapshot.getValue().toString(), Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                tvSalida.setText(dataSnapshot.getValue().toString());
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                tvSalida.setText(dataSnapshot.getValue().toString()+" ha sido eliminado");
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 }
