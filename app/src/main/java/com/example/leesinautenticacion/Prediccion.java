@@ -3,25 +3,18 @@ package com.example.leesinautenticacion;
 public class Prediccion {
 
     private String cielo;
-    private int temperatura;
-    private int humedad;
     private String fecha;
-
-    public String getFecha() {
-        return fecha;
-    }
-
-    public void setFecha(String fecha) {
-        this.fecha = fecha;
-    }
+    private long humedad;
+    private long temperatura;
 
     public Prediccion() {
     }
 
-    public Prediccion(String cielo, int temperatura, int humedad) {
+    public Prediccion(String cielo, String fecha, int humedad, int temperatura) {
         this.cielo = cielo;
-        this.temperatura = temperatura;
+        this.fecha = fecha;
         this.humedad = humedad;
+        this.temperatura = temperatura;
     }
 
     public String getCielo() {
@@ -32,19 +25,27 @@ public class Prediccion {
         this.cielo = cielo;
     }
 
-    public int getTemperatura() {
+    public long getTemperatura() {
         return temperatura;
     }
 
-    public void setTemperatura(int temperatura) {
+    public void setTemperatura(long temperatura) {
         this.temperatura = temperatura;
     }
 
-    public int getHumedad() {
+    public long getHumedad() {
         return humedad;
     }
 
-    public void setHumedad(int humedad) {
+    public void setHumedad(long humedad) {
         this.humedad = humedad;
+    }
+
+    public String getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(String fecha) {
+        this.fecha = fecha;
     }
 }

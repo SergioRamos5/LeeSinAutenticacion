@@ -3,6 +3,8 @@ package com.example.leesinautenticacion;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.View;
@@ -29,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
     TextView tvSalida;
     ChildEventListener childEventListener;
     FirebaseDatabase firebaseDatabase;
-    Adapter mAdapter;
+    Adaptador mAdapter;
     EditText etCielo, etTemperatura,etHumedad, etFecha;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,6 +129,46 @@ public class MainActivity extends AppCompatActivity {
         final DatabaseReference dbPred = FirebaseDatabase.getInstance().getReference().child("prediccion");
         FirebaseRecyclerOptions<Prediccion> firebaseRecyclerOptions = new FirebaseRecyclerOptions.Builder<Prediccion>().setQuery(dbPred, Prediccion.class).build();
 
+        final RecyclerView recyclerView = findViewById(R.id.recycler);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        mAdapter = new Adaptador(firebaseRecyclerOptions);
+        recyclerView.setAdapter(mAdapter);
+
+        mAdapter.onClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "Elemento eliminado" + recyclerView.getChildAdapterPosition(v), Toast.LENGTH_LONG).show();
+                String key = mAdapter.getRef(recyclerView.getChildAdapterPosition(v)).getKey();
+                dbPred.child(key).removeValue();
+            }
+        });
+
+
         //endregion
     }
+
+    @Override
+    protected void onDestroy()
+    {
+        if (firebaseDatabase != null && childEventListener != null)
+            firebaseDatabase.getReference("prediccion").removeEventListener(childEventListener);
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onStart()
+    {
+        mAdapter.startListening();
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop()
+    {
+        mAdapter.stopListening();
+        super.onStop();
+    }
+
 }
