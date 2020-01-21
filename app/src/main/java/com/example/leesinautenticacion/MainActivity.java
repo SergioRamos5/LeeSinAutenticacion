@@ -12,6 +12,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -28,12 +30,14 @@ public class MainActivity extends AppCompatActivity {
     ChildEventListener childEventListener;
     FirebaseDatabase firebaseDatabase;
     Adapter mAdapter;
-
+    EditText etCielo, etTemperatura,etHumedad, etFecha;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_mainv2);
 
+        //region Ejercicio 1
+        /*
         etTexto = findViewById(R.id.etTexto);
         tvSalida = findViewById(R.id.tvSalida);
         btEnviar = findViewById(R.id.btEnviar);
@@ -89,5 +93,40 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        */
+        //endregion
+
+        //region Ejercicio 2
+/*
+        etCielo = findViewById(R.id.tCielo);
+        etTemperatura = findViewById(R.id.tTemperatura);
+        etHumedad = findViewById(R.id.tHumedad);
+
+        DatabaseReference dbPred = FirebaseDatabase.getInstance().getReference().child("predicciones-hoy");
+
+        dbPred.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Prediccion p = dataSnapshot.getValue(Prediccion.class);
+                etFecha.setText(p.getFecha());
+                etCielo.setText(p.getCielo());
+                etTemperatura.setText(p.getTemperatura()+"ºC");
+                etHumedad.setText(p.getHumedad()+"%");
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+*/
+        //endregion
+
+        //region Ejercicio 3
+
+        final DatabaseReference dbPred = FirebaseDatabase.getInstance().getReference().child("prediccion");
+        FirebaseRecyclerOptions<Prediccion> firebaseRecyclerOptions = new FirebaseRecyclerOptions.Builder<Prediccion>().setQuery(dbPred, Prediccion.class).build();
+
+        //endregion
     }
 }
